@@ -23,24 +23,23 @@ def emo_detector():
     """
     # Retrieve the text to detect from the request arguments
     text_to_analyse = request.args.get('textToAnalyze')
-    
     # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyse)
-    
-    if response['dominant_emotion'] != None:
+    if response['dominant_emotion'] is not None:
         # Initialize the result string
         res = "For the given statement, the system response is"
-        
         # Iterate through the response
-        emotions = [f" '{key}' : {value}" for key, value in response.items() if key != 'dominant_emotion']
+        emotions = [
+                f" '{key}' : {value}"
+                for key, value in response.items()
+                if key != 'dominant_emotion'
+            ]
         res += ", ".join(emotions[:-1])  # Join all emotions except the last one with commas
         res += f" and{emotions[-1]}."  # Add 'and' before the last emotion
-
         # Add the dominant emotion
         res += f" The dominant emotion is <b>{response['dominant_emotion']}</b>."
         return res
-    else :
-        return "Invalid text! Please try again!"
+    return "Invalid text! Please try again!"
 
 @app.route("/")
 def render_index_page():
